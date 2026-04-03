@@ -1,0 +1,33 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS folder settings
+Icon?
+._*
+
+# Linux system files
+*~
+*.swp
+*.swo
+*.bak
+
+# Logs
+*.log
+
+# Neovim / Vim
+*.swp
+*.swo
+*.swn
+*.un~
+*.vimbackup
+*.vimundo
+*.nvimbackup
+*.nvimundo
+*.nvimrc.local
+
+# Oh-My-Zsh / TPM / FZF plugins (cloned repos)
+tmux/plugins
+
+
