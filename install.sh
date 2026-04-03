@@ -59,7 +59,7 @@ install_linux() {
   curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hasklig.zip && \
   unzip Hasklug.zip -d HasklugNerdFont && \
   fc-cache -fv && \
-  rm -rf Hasklug.zip && cd ~/workspace
+  rm -rf Hasklug.zip && cd -;
 
   echo "Setting up the the configs for me..."
   ln -sf $PWD/zshrc ~/.zshrc
@@ -80,12 +80,13 @@ install_macos() {
 
   echo "Installing packages via Homebrew..."
   brew update
-  brew install neovim btop podman ranger zsh curl tmux xclip fontawesome zk
-  brewn install --cask kitty
+  brew install neovim btop podman ranger zsh curl tmux xclip fontawesome zk unzip wget
+  brewn install --cask kitty font-fontawesome font-hack-nerd-font
   echo "Setting up kitty..."
   THEME=https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/gruvbox_dark.conf
   wget "$THEME" -P ~/.config/kitty/kitty-themes/themes
   git clone --depth 1 https://github.com/dexpota/kitty-themes.git $HOME/.config/kitty/kitty-themes
+  # Maybe kitty might have difficulties finding the fonts 
   cp $PWD/kitty.conf ~/.config/kitty/kitty.conf
 
   echo "Setting up oh-my-zsh..."
