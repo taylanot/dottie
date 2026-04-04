@@ -80,7 +80,7 @@ install_macos() {
 
   echo "Installing packages via Homebrew..."
   brew update
-  brew install neovim btop podman ranger zsh curl tmux xclip fontawesome zk unzip wget
+  brew install neovim btop podman ranger zsh curl tmux xclip fontawesome zk unzip wget git-flow-next
   brewn install --cask kitty font-fontawesome font-hack-nerd-font
   echo "Setting up kitty..."
   THEME=https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/gruvbox_dark.conf
