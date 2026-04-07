@@ -56,8 +56,9 @@ ls-meet = 'zk edit "$ZK_NOTEBOOK_DIR/meet" --sort created- --interactive'
 
 daily = 'zk new --no-input "$ZK_NOTEBOOK_DIR/daily"'
 ls-daily = 'zk edit "$ZK_NOTEBOOK_DIR/daily" --sort created- --interactive'
+yesterdaily = "nvim -R $(zk path $(date -d 'yesterday' +%F))"
 
-update = "cd $../ZK_NOTEBOOK_DIR; git add -A; git commit -am 'updating'; git push; cd -"
+update= "cd $ZK_NOTEBOOK_DIR; git add -A; git commit -am 'updating';git push origin main; cd -"
 
 [lsp]
 [lsp.diagnostics]
