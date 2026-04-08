@@ -1,5 +1,5 @@
 # Meeting: {{title}}
-Date: {{date}}
+Date: {{format-date now "long"}}
 Tags: #meeting
 
 ---
