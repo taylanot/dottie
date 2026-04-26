@@ -1,6 +1,4 @@
-
 #!/usr/bin/env bash
-
 set -e
 
 echo "Starting installation..."
@@ -54,12 +52,14 @@ install_linux() {
   git clone --depth 1 https://github.com/dexpota/kitty-themes.git $HOME/.config/kitty/kitty-themes
   cp $PWD/kitty.conf ~/.config/kitty/kitty.conf
 
-  echo "Setting up my font Hasklug..."
-  mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && \
-  curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hasklig.zip && \
-  unzip Hasklug.zip -d HasklugNerdFont && \
-  fc-cache -fv && \
-  rm -rf Hasklug.zip && cd -;
+  echo "Setting up my font Ubuntu Mono Nerd Font..."
+  FONT_DIR="$HOME/.local/share/fonts"
+  FONT_NAME="UbuntuMono"
+  mkdir -p "$FONT_DIR" && cd "$FONT_DIR" && \
+  curl -LO "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/${FONT_NAME}.zip" && \
+  unzip "${FONT_NAME}.zip" -d "${FONT_NAME}NerdFont" && \
+  rm -f "${FONT_NAME}.zip" && \
+  fc-cache -fv && cd -;
 
   echo "Setting up the the configs for me..."
   ln -sf $PWD/zshrc ~/.zshrc
@@ -81,7 +81,7 @@ install_macos() {
   echo "Installing packages via Homebrew..."
   brew update
   brew install neovim btop podman ranger zsh curl tmux xclip fontawesome zk unzip wget git-flow-next presenterm
-  brewn install --cask kitty font-fontawesome font-hack-nerd-font
+  brew install --cask kitty font-fontawesome font-hack-nerd-font
   echo "Setting up kitty..."
   THEME=https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/gruvbox_dark.conf
   wget "$THEME" -P ~/.config/kitty/kitty-themes/themes
