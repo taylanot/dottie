@@ -23,7 +23,10 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set noshiftround
-set cc=80
+augroup ColorColumn
+  autocmd!
+  autocmd FileType python,c,cpp setlocal cc=80
+augroup END
 
 :set autoindent
 :set smarttab
