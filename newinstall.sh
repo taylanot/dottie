@@ -34,7 +34,20 @@ install_linux() {
   if $MINIMAL; then
     echo "Installing minimal packages..."
     $SUDO apt install -y neovim btop podman zsh curl xclip git make wget unzip
-    echo "Minimal installation complete! Run zsh to get started."
+
+    echo "Setting up oh-my-zsh..."
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+    echo "Setting up zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+    echo "Setting up zsh-history-substring-search..."
+    git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+
+    echo "Changing default shell to zsh..."
+    $SUDO chsh -s "$(which zsh)" "$USER"
+
+    echo "Minimal installation complete! Start a new shell session or run 'zsh' to get started."
     return
   fi
 
@@ -103,7 +116,20 @@ install_macos() {
     brew install neovim btop podman zsh curl git make wget unzip
     # xclip is Linux-only; pbcopy/pbpaste serve the same role on macOS
     echo "Note: xclip is Linux-only — macOS uses pbcopy/pbpaste natively."
-    echo "Minimal installation complete! Run zsh to get started."
+
+    echo "Setting up oh-my-zsh..."
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+    echo "Setting up zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+    echo "Setting up zsh-history-substring-search..."
+    git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+
+    echo "Changing default shell to zsh..."
+    chsh -s "$(which zsh)"
+
+    echo "Minimal installation complete! Start a new shell session or run 'zsh' to get started."
     return
   fi
 
