@@ -39,10 +39,10 @@ install_linux() {
     RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
     echo "Setting up zsh-syntax-highlighting..."
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  2>/dev/null
 
     echo "Setting up zsh-history-substring-search..."
-    git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+    git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search  2>/dev/null
 
     echo "Changing default shell to zsh..."
     $SUDO chsh -s "$(which zsh)" "$USER"
@@ -55,7 +55,7 @@ install_linux() {
   $SUDO apt install -y neovim btop podman ranger zsh curl kitty tmux xclip fonts-font-awesome git golang-go make wget unzip
 
   echo "Installing go and zk..."
-  git clone https://github.com/zk-org/zk.git $HOME/zk-git; cd $HOME/zk-git; make build; mv zk /usr/local/bin; cd -; rm -rf zk-git;
+  git clone https://github.com/zk-org/zk.git $HOME/zk-git 2>/dev/null; cd $HOME/zk-git; make build; mv zk /usr/local/bin; cd -; rm -rf zk-git;
 
   echo "Installing TPM..."
   git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -68,21 +68,21 @@ install_linux() {
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   echo "Setting up powerlevel10k..."
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k 2>/dev/null
 
   echo "Setting up plugins-fzf..."
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf  2>/dev/null
 
   echo "Setting up plugins-zsh-syntax-highlighting..."
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  2>/dev/null
 
   echo "Setting up plugins-zsh-substring-search..."
-  git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+  git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search  2>/dev/null
 
   echo "Setting up kitty..."
   THEME=https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/gruvbox_dark.conf
   wget "$THEME" -P ~/.config/kitty/kitty-themes/themes
-  git clone --depth 1 https://github.com/dexpota/kitty-themes.git $HOME/.config/kitty/kitty-themes
+  git clone --depth 1 https://github.com/dexpota/kitty-themes.git $HOME/.config/kitty/kitty-themes  2>/dev/null
   cp $PWD/kitty.conf ~/.config/kitty/kitty.conf
 
   echo "Setting up my font Ubuntu Mono Nerd Font..."
@@ -121,10 +121,10 @@ install_macos() {
     RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
     echo "Setting up zsh-syntax-highlighting..."
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  2>/dev/null
 
     echo "Setting up zsh-history-substring-search..."
-    git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+    git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search  2>/dev/null
 
     echo "Changing default shell to zsh..."
     chsh -s "$(which zsh)"
@@ -140,23 +140,23 @@ install_macos() {
   echo "Setting up kitty..."
   THEME=https://raw.githubusercontent.com/dexpota/kitty-themes/master/themes/gruvbox_dark.conf
   wget "$THEME" -P ~/.config/kitty/kitty-themes/themes
-  git clone --depth 1 https://github.com/dexpota/kitty-themes.git $HOME/.config/kitty/kitty-themes
+  git clone --depth 1 https://github.com/dexpota/kitty-themes.git $HOME/.config/kitty/kitty-themes  2>/dev/null
   cp $PWD/kitty.conf ~/.config/kitty/kitty.conf
 
   echo "Setting up oh-my-zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   echo "Setting up powerlevel10k..."
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k
+  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.oh-my-zsh/custom/themes/powerlevel10k  2>/dev/null
 
   echo "Setting up plugins-fzf..."
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf  2>/dev/null
 
   echo "Setting up plugins-zsh-syntax-highlighting..."
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting  2>/dev/null
 
   echo "Setting up plugins-zsh-substring-search..."
-  git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+  git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search  2>/dev/null
 
   echo "Setting up configs..."
   ln -sf $PWD/zshrc ~/.zshrc
