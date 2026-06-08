@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+
+# ── Layout ────────────────────────────────────────────────
+yabai -m config layout                      stack
+yabai -m config window_placement            second_child
+
+# ── Gaps ─────────────────────────────────────────────────
+yabai -m config top_padding                 10
+yabai -m config bottom_padding              10
+yabai -m config left_padding                10
+yabai -m config right_padding               10
+yabai -m config window_gap                  10
+
+# ── Mouse ─────────────────────────────────────────────────
+yabai -m config mouse_modifier              fn
+yabai -m config mouse_action1               move
+yabai -m config mouse_action2               resize
+yabai -m config mouse_drop_action           swap
+
+# ── Window ────────────────────────────────────────────────
+yabai -m config window_shadow               float
+yabai -m config window_opacity              on
+yabai -m config active_window_opacity       1.0
+yabai -m config normal_window_opacity       0.9
+
+# ── Exclude apps from tiling ──────────────────────────────
+yabai -m rule --add app="^System Preferences$"  manage=off
+yabai -m rule --add app="^System Settings$"     manage=off
+yabai -m rule --add app="^Alfred$"              manage=off
+yabai -m rule --add app="^Finder$"              manage=off
+yabai -m rule --add app="^1Password$"           manage=off
+
+echo "✓ yabai config loaded"

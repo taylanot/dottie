@@ -1,0 +1,63 @@
+# ── Focus window ──────────────────────────────────────────
+alt - h : yabai -m window --focus west
+alt - l : yabai -m window --focus east
+
+# ── Focus space (vertical stack) ─────────────────────────
+alt - j : yabai -m space --focus next
+alt - k : yabai -m space --focus prev
+
+# ── Move window ───────────────────────────────────────────
+shift + alt - h : yabai -m window --warp west
+shift + alt - l : yabai -m window --warp east
+
+# ── Move window to next/prev space ───────────────────────
+shift + alt - j : yabai -m window --space next; yabai -m space --focus next
+shift + alt - k : yabai -m window --space prev; yabai -m space --focus prev
+
+# ── Resize window ─────────────────────────────────────────
+ctrl + alt - h : yabai -m window --resize left:-50:0; \
+                 yabai -m window --resize right:-50:0
+ctrl + alt - l : yabai -m window --resize right:50:0; \
+                 yabai -m window --resize left:50:0
+ctrl + alt - j : yabai -m window --resize bottom:0:50; \
+                 yabai -m window --resize top:0:50
+ctrl + alt - k : yabai -m window --resize top:0:-50; \
+                 yabai -m window --resize bottom:0:-50
+
+# ── Float / unfloat window ────────────────────────────────
+alt - t : yabai -m window --toggle float; \
+          yabai -m window --grid 4:4:1:1:2:2
+
+# ── Fullscreen ────────────────────────────────────────────
+alt - f : yabai -m window --toggle zoom-fullscreen
+shift + alt - f : yabai -m window --toggle native-fullscreen
+
+# ── Rotate / mirror layout ────────────────────────────────
+alt - r : yabai -m space --rotate 90
+alt - y : yabai -m space --mirror y-axis
+alt - x : yabai -m space --mirror x-axis
+
+# ── Balance layout ────────────────────────────────────────
+alt - b : yabai -m space --balance
+
+# ── Switch space by number ────────────────────────────────
+alt - 1 : yabai -m space --focus 1
+alt - 2 : yabai -m space --focus 2
+alt - 3 : yabai -m space --focus 3
+alt - 4 : yabai -m space --focus 4
+alt - 5 : yabai -m space --focus 5
+
+# ── Move window to space by number ───────────────────────
+shift + alt - 1 : yabai -m window --space 1
+shift + alt - 2 : yabai -m window --space 2
+shift + alt - 3 : yabai -m window --space 3
+shift + alt - 4 : yabai -m window --space 4
+shift + alt - 5 : yabai -m window --space 5
+
+# ── App launchers ─────────────────────────────────────────
+alt - w : open "https://"
+alt - t : open -a "kitty"
+
+# ── Restart services ──────────────────────────────────────
+ctrl + alt - r : brew services restart yabai
+ctrl + alt - s : brew services restart skhd
