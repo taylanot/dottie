@@ -71,7 +71,7 @@ ifeq ($(OS),Darwin)
 	brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
 	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
 	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
-	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
+	@eval "$$($(BREW) shellenv 2>/dev/null)"; 
 	@echo "✓ yabai and skhd installed"
 else
 	@echo "⚠ yabai is macOS only, skipping"
@@ -110,8 +110,8 @@ symlinks:
 ifeq ($(OS),Darwin)
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
-	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
-	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
+	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabairc)
+	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhdrc)
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	@echo "✓ yabai and skhd installed"
 else
@@ -143,14 +143,10 @@ update-symlinks:
 	@rm -f $(HOME)/.config/zk
 	@rm -f $(HOME)/.config/kitty/kitty.conf
 ifeq ($(OS),Darwin)
-	@rm -f $(HOME)/.config/yabai
-	@rm -f $(HOME)/.config/skhd
+	@rm -f $(HOME)/.config/yabairc
+	@rm -f $(HOME)/.config/skhdrc
 endif
 	@$(MAKE) symlinks
-ifeq ($(OS),Darwin)
-	@$(MAKE) yabai-symlinks
-endif
-	@echo "✓ Symlinks updated"
 
 help:
 	@echo "make install         – full setup (bootstrap + brew + packages + plugins + fonts + symlinks)"
