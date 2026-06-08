@@ -108,11 +108,12 @@ symlinks:
 	$(call safe_link,$(DOTFILES_DIR)/zk,$(HOME)/.config/zk)
 	$(call safe_link,$(DOTFILES_DIR)/kitty.conf,$(HOME)/.config/kitty/kitty.conf)
 ifeq ($(OS),Darwin)
-	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
-	brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
-	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabairc)
-	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhdrc)
-	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
+	@mkdir -p $(HOME)/.config/yabai
+	@mkdir -p $(HOME)/.config/skhd
+	@eval "$$($(BREW) shellenv 2>/dev/null)";
+	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai/yabairc)
+	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd/skhdrc)
+	@eval "$$($(BREW) shellenv 2>/dev/null)";
 	@echo "✓ yabai and skhd installed"
 else
 	@echo "⚠ yabai is macOS only, skipping"
@@ -137,14 +138,14 @@ shell:
 # ── Update Symlinks (force re-link) ──────────────────────
 update-symlinks:
 	@echo "→ Updating symlinks..."
-	@rm -f $(HOME)/.zshrc
-	@rm -f $(HOME)/.config/nvim
-	@rm -f $(HOME)/.config/tmux
-	@rm -f $(HOME)/.config/zk
-	@rm -f $(HOME)/.config/kitty/kitty.conf
+	-@unlink $(HOME)/.zshrc
+	-@unlink $(HOME)/.config/nvim
+	-@unlink $(HOME)/.config/tmux
+	-@unlink $(HOME)/.config/zk
+	-@unlink $(HOME)/.config/kitty/kitty.conf
 ifeq ($(OS),Darwin)
-	@rm -f $(HOME)/.config/yabairc
-	@rm -f $(HOME)/.config/skhdrc
+	-@unlink $(HOME)/.config/yabai/yabairc
+	-@unlink $(HOME)/.config/skhd/skhdrc
 endif
 	@$(MAKE) symlinks
 
