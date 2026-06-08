@@ -25,3 +25,6 @@ function y() {
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	rm -f -- "$tmp"
 }
+# Account for already installed vim
+alias vi=nvim
+alias vim=nvim

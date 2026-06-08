@@ -1,6 +1,15 @@
 DOTFILES_DIR := $(shell pwd)
-BREW := /home/linuxbrew/.linuxbrew/bin/brew
+
 OS := $(shell uname -s)
+ifeq ($(OS),Darwin)
+  ifeq ($(shell uname -m),arm64)
+    BREW := /opt/homebrew/bin/brew
+  else
+    BREW := /usr/local/bin/brew
+  endif
+else
+  BREW := /home/linuxbrew/.linuxbrew/bin/brew
+endif
 
 .PHONY: install minimal symlinks fonts plugins check help bootstrap brew packages minimal-packages shell
 
@@ -29,8 +38,8 @@ ifeq ($(OS),Linux)
 	@command -v sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=""; \
 	$$SUDO apt-get install -y curl git build-essential
 else
-	@command -v sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=""; \
-	$$SUDO xcode-select --install
+	@xcode-select -p >/dev/null 2>&1 && echo "✓ Xcode CLI tools already installed" || \
+	  xcode-select --install
 endif
 
 # ── Homebrew ──────────────────────────────────────────────
@@ -48,7 +57,7 @@ packages: brew
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	brew update && \
 	brew install neovim btop podman yazi zsh tmux zk wget unzip \
-	             font-fontawesome font-hack-nerd-font
+	             font-fontawesome font-hack-nerd-font fzf
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; brew install --cask kitty
 
 minimal-packages: brew
