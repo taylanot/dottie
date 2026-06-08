@@ -23,7 +23,7 @@ define safe_link
 endef
 
 # ── Entry points ──────────────────────────────────────────
-install: bootstrap brew packages plugins fonts symlinks shell
+install: bootstrap brew packages plugins fonts symlinks shell yabai
 	@echo "→ brew PATH written to ~/.profile. Run: source ~/.profile"
 	@echo "✓ Full install complete. Run: zsh"
 
@@ -64,6 +64,19 @@ minimal-packages: brew
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	brew install neovim zsh tmux btop wget yazi fzf
 
+# ── Tiling WM (macOS only) ────────────────────────────────
+yabai:
+ifeq ($(OS),Darwin)
+	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
+	brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
+	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
+	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
+	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
+	brew services start yabai && brew services start skhd
+	@echo "✓ yabai and skhd installed and started"
+else
+	@echo "⚠ yabai is macOS only, skipping"
+endif
 # ── Plugins (idempotent) ────────────────────────────
 _plugins-common:
 	$(call git_clone,https://github.com/ohmyzsh/ohmyzsh.git,$(HOME)/.oh-my-zsh)
