@@ -77,6 +77,7 @@ ifeq ($(OS),Darwin)
 else
 	@echo "⚠ yabai is macOS only, skipping"
 endif
+
 # ── Plugins (idempotent) ────────────────────────────
 _plugins-common:
 	$(call git_clone,https://github.com/ohmyzsh/ohmyzsh.git,$(HOME)/.oh-my-zsh)
@@ -108,6 +109,13 @@ symlinks:
 	$(call safe_link,$(DOTFILES_DIR)/zk,$(HOME)/.config/zk)
 	$(call safe_link,$(DOTFILES_DIR)/kitty.conf,$(HOME)/.config/kitty/kitty.conf)
 
+# ── Symlinks for yabai (safe, idempotent) ────────────────
+yabai-symlinks:
+ifeq ($(OS),Darwin)
+	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
+	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
+endif
+
 # ── Utility ───────────────────────────────────────────────
 check:
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
@@ -123,9 +131,28 @@ shell:
 	chsh -s "$$BREW_ZSH"
 	@echo "✓ Default shell changed to brew zsh. Re-login to take effect."
 
+# ── Update Symlinks (force re-link) ──────────────────────
+update-symlinks:
+	@echo "→ Updating symlinks..."
+	@rm -f $(HOME)/.zshrc
+	@rm -f $(HOME)/.config/nvim
+	@rm -f $(HOME)/.config/tmux
+	@rm -f $(HOME)/.config/zk
+	@rm -f $(HOME)/.config/kitty/kitty.conf
+ifeq ($(OS),Darwin)
+	@rm -f $(HOME)/.config/yabai
+	@rm -f $(HOME)/.config/skhd
+endif
+	@$(MAKE) symlinks
+ifeq ($(OS),Darwin)
+	@$(MAKE) yabai-symlinks
+endif
+	@echo "✓ Symlinks updated"
+
 help:
 	@echo "make install         – full setup (bootstrap + brew + packages + plugins + fonts + symlinks)"
 	@echo "make minimal         – neovim, zsh, tmux, git, fzf + symlinks"
 	@echo "make symlinks        – (re)link dotfiles only"
 	@echo "make fonts           – install UbuntuMono Nerd Font via brew cask"
+	@echo "make update-symlinks – force re-link all dotfiles"
 	@echo "make check           – verify all tools are installed"
