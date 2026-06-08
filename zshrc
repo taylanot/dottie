@@ -10,7 +10,7 @@ export ZK_CONFIG_DIR="$HOME/.config/zk"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-plugins=( git zsh-syntax-highlighting zsh-history-substring-search fzf )
+plugins=( git zsh-syntax-highlighting zsh-history-substring-search fzf zsh-autosuggestions )
 
 source $ZSH/oh-my-zsh.sh
 

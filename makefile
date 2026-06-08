@@ -23,7 +23,7 @@ define safe_link
 endef
 
 # ── Entry points ──────────────────────────────────────────
-install: bootstrap brew packages plugins fonts symlinks shell yabai
+install: bootstrap brew packages plugins fonts symlinks shell
 	@echo "→ brew PATH written to ~/.profile. Run: source ~/.profile"
 	@echo "✓ Full install complete. Run: zsh"
 
@@ -57,25 +57,12 @@ packages: brew
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	brew update && \
 	brew install neovim btop podman yazi zsh tmux zk wget unzip \
-	             font-fontawesome font-hack-nerd-font fzf
+	             font-fontawesome font-hack-nerd-font fzf git-flow-next
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; brew install --cask kitty
 
 minimal-packages: brew
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
-	brew install neovim zsh tmux btop wget yazi fzf
-
-# ── Tiling WM (macOS only) ────────────────────────────────
-yabai:
-ifeq ($(OS),Darwin)
-	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
-	brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
-	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
-	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
-	@eval "$$($(BREW) shellenv 2>/dev/null)"; 
-	@echo "✓ yabai and skhd installed"
-else
-	@echo "⚠ yabai is macOS only, skipping"
-endif
+	brew install neovim zsh tmux btop wget yazi fzf git-flow-next
 
 # ── Plugins (idempotent) ────────────────────────────
 _plugins-common:
@@ -83,6 +70,7 @@ _plugins-common:
 	$(call git_clone,https://github.com/romkatv/powerlevel10k.git,$(HOME)/.oh-my-zsh/custom/themes/powerlevel10k)
 	$(call git_clone,https://github.com/zsh-users/zsh-syntax-highlighting.git,$(HOME)/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting)
 	$(call git_clone,https://github.com/zsh-users/zsh-history-substring-search.git,$(HOME)/.oh-my-zsh/custom/plugins/zsh-history-substring-search)
+	$(call git_clone,https://github.com/zsh-users/zsh-autosuggestions.git,$(HOME)/.oh-my-zsh/custom/plugins/zsh-autosuggestions)
 	@curl -fLo "$${XDG_DATA_HOME:-$$HOME/.local/share}/nvim/site/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; nvim --headless +PlugInstall +qall 2>/dev/null || true
 	@echo "✓ neovim plugins installed"
@@ -107,16 +95,6 @@ symlinks:
 	$(call safe_link,$(DOTFILES_DIR)/tmux,$(HOME)/.config/tmux)
 	$(call safe_link,$(DOTFILES_DIR)/zk,$(HOME)/.config/zk)
 	$(call safe_link,$(DOTFILES_DIR)/kitty.conf,$(HOME)/.config/kitty/kitty.conf)
-ifeq ($(OS),Darwin)
-	@mkdir -p $(HOME)/.config/yabai
-	@mkdir -p $(HOME)/.config/skhd
-	@eval "$$($(BREW) shellenv 2>/dev/null)";
-	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai/yabairc)
-	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd/skhdrc)
-	@eval "$$($(BREW) shellenv 2>/dev/null)";
-	@echo "✓ yabai and skhd installed"
-else
-	@echo "⚠ yabai is macOS only, skipping"
 endif
 
 
@@ -143,10 +121,6 @@ update-symlinks:
 	-@unlink $(HOME)/.config/tmux
 	-@unlink $(HOME)/.config/zk
 	-@unlink $(HOME)/.config/kitty/kitty.conf
-ifeq ($(OS),Darwin)
-	-@unlink $(HOME)/.config/yabai/yabairc
-	-@unlink $(HOME)/.config/skhd/skhdrc
-endif
 	@$(MAKE) symlinks
 
 help:
