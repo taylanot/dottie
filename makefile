@@ -72,8 +72,7 @@ ifeq ($(OS),Darwin)
 	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
 	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
-	brew services start yabai && brew services start skhd
-	@echo "✓ yabai and skhd installed and started"
+	@echo "✓ yabai and skhd installed"
 else
 	@echo "⚠ yabai is macOS only, skipping"
 endif
@@ -108,13 +107,17 @@ symlinks:
 	$(call safe_link,$(DOTFILES_DIR)/tmux,$(HOME)/.config/tmux)
 	$(call safe_link,$(DOTFILES_DIR)/zk,$(HOME)/.config/zk)
 	$(call safe_link,$(DOTFILES_DIR)/kitty.conf,$(HOME)/.config/kitty/kitty.conf)
-
-# ── Symlinks for yabai (safe, idempotent) ────────────────
-yabai-symlinks:
 ifeq ($(OS),Darwin)
+	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
+	brew install koekeishiya/formulae/yabai koekeishiya/formulae/skhd
 	$(call safe_link,$(DOTFILES_DIR)/yabai,$(HOME)/.config/yabai)
 	$(call safe_link,$(DOTFILES_DIR)/skhd,$(HOME)/.config/skhd)
+	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
+	@echo "✓ yabai and skhd installed"
+else
+	@echo "⚠ yabai is macOS only, skipping"
 endif
+
 
 # ── Utility ───────────────────────────────────────────────
 check:
