@@ -28,3 +28,5 @@ function y() {
 # Account for already installed vim
 alias vi=nvim
 alias vim=nvim
+# Open files with nvim in yazi
+export EDITOR=nvim
