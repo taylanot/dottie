@@ -19,7 +19,13 @@ define git_clone
 endef
 
 define safe_link
-	@[ -L $(2) ] || ln -sf $(1) $(2)
+	@mkdir -p $(dir $(2))
+	@if [ -e $(2) ] || [ -L $(2) ]; then \
+		echo "→ Backing up $(2)"; \
+		mv $(2) $(2).backup; \
+	fi
+	@ln -s $(1) $(2)
+	@echo "✓ Linked $(2) -> $(1)"
 endef
 
 # ── Entry points ──────────────────────────────────────────
@@ -95,7 +101,6 @@ symlinks:
 	$(call safe_link,$(DOTFILES_DIR)/tmux,$(HOME)/.config/tmux)
 	$(call safe_link,$(DOTFILES_DIR)/zk,$(HOME)/.config/zk)
 	$(call safe_link,$(DOTFILES_DIR)/kitty.conf,$(HOME)/.config/kitty/kitty.conf)
-endif
 
 
 # ── Utility ───────────────────────────────────────────────
@@ -116,11 +121,6 @@ shell:
 # ── Update Symlinks (force re-link) ──────────────────────
 update-symlinks:
 	@echo "→ Updating symlinks..."
-	-@unlink $(HOME)/.zshrc
-	-@unlink $(HOME)/.config/nvim
-	-@unlink $(HOME)/.config/tmux
-	-@unlink $(HOME)/.config/zk
-	-@unlink $(HOME)/.config/kitty/kitty.conf
 	@$(MAKE) symlinks
 
 help:
