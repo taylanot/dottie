@@ -30,3 +30,7 @@ alias vi=nvim
 alias vim=nvim
 # Open files with nvim in yazi
 export EDITOR=nvim
+
+. "$HOME/.local/bin/env"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH=$PATH:~/.cargo/bin

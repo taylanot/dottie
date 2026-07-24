@@ -63,12 +63,12 @@ packages: brew
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	brew update && \
 	brew install neovim btop podman yazi zsh tmux zk wget unzip \
-	             font-fontawesome font-hack-nerd-font fzf git-flow-next
+	             font-fontawesome font-hack-nerd-font fzf git-flow-next rust
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; brew install --cask kitty
 
 minimal-packages: brew
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
-	brew install neovim zsh tmux btop wget yazi fzf git-flow-next
+	brew install neovim zsh tmux btop wget yazi fzf git-flow-next rust
 
 # ── Plugins (idempotent) ────────────────────────────
 _plugins-common:
