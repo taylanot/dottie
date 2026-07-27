@@ -31,6 +31,36 @@ alias vim=nvim
 # Open files with nvim in yazi
 export EDITOR=nvim
 
-. "$HOME/.local/bin/env"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Detect operating system
+case "$(uname -s)" in
+  Darwin)
+    # macOS
+
+    # Source local env file if it exists
+    [ -f "$HOME/.local/bin/env" ] && source "$HOME/.local/bin/env"
+
+    # Homebrew
+    if [ -x /opt/homebrew/bin/brew ]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /usr/local/bin/brew ]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
+    ;;
+
+  Linux)
+    # Linux
+
+    # Source local env file if it exists
+    [ -f "$HOME/.local/bin/env" ] && source "$HOME/.local/bin/env"
+
+    # Linuxbrew/Homebrew
+    if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    elif [ -x "$HOME/.linuxbrew/bin/brew" ]; then
+      eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
+    fi
+    ;;
+esac
+
+
 export PATH=$PATH:~/.cargo/bin
