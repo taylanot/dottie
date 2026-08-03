@@ -106,10 +106,4 @@ map('n', '<leader>p', '"+p', 'Paste after cursor from clipboard')
 map('n', '<leader>P', '"+P', 'Paste before cursor from clipboard')
 set clipboard+=unnamedplus
 
-" let g:autocompile_tex = 1
-" command! ShowTexAutocompile echo "Auto-compile is " . (g:autocompile_tex ? "enabled" : "disabled")
-" " if I have a tex file after each save my comptex will try to run 
-" augroup tex_autocommands
-"     autocmd!
-"     autocmd BufWritePost *.tex if g:autocompile_tex | !comptex % | endif
-" augroup END
+
