@@ -91,6 +91,7 @@ plugins: _plugins-common
 fonts:
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	brew install --cask font-ubuntu-mono-nerd-font
+	brew install --cask font-atkynson-mono-nerd-font
 	@fc-cache -fv 2>/dev/null || true
 
 # ── Symlinks (safe, idempotent) ───────────────────────────
