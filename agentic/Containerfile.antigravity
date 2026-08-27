@@ -1,0 +1,68 @@
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+
+# Base dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        bash \
+        curl \
+        git \
+        ca-certificates \
+        neovim \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Agent user
+RUN useradd \
+    --create-home \
+    --home-dir /home/agent \
+    --shell /bin/bash \
+    agent
+
+# Neovim config (from dottie, config only — no make/brew/plugins) Just incase
+RUN git clone --depth 1 --filter=blob:none --sparse \
+        https://github.com/taylanot/dottie.git /tmp/dottie \
+    && git -C /tmp/dottie sparse-checkout set nvim \
+    && mkdir -p /home/agent/.config \
+    && cp -r /tmp/dottie/nvim /home/agent/.config/nvim \
+    && rm -rf /tmp/dottie \
+    && chown -R agent:agent /home/agent/.config/nvim
+
+# Agent environment
+RUN mkdir -p \
+        /home/agent/app \
+        /home/agent/workspace \
+        /home/agent/.cache \
+    && chown -R agent:agent /home/agent
+
+# From here use the onward: agent
+USER agent
+ENV HOME=/home/agent \
+    WORKSPACE=/home/agent/workspace \
+    PATH=/home/agent/.local/bin:$PATH
+
+# Antigravity
+RUN curl -fsSL https://antigravity.google/cli/install.sh | bash \
+    && mkdir -p /home/agent/.gemini/antigravity-cli \
+    && printf '{\n    "modelProvider": "gemini"\n}\n' \
+        > /home/agent/.gemini/antigravity-cli/settings.json
+
+RUN printf '\n\
+========================================================\n\
+  To run this image, create the Podman secret first:\n\
+\n\
+    printf '"'"'%%s'"'"' "$GEMINI_API_KEY" | podman secret create gemini_key -\n\
+\n\
+  (use printf, not echo — echo adds a trailing newline\n\
+   that corrupts the key and breaks API requests)\n\
+\n\
+  Then run:\n\
+\n\
+    podman run --rm -it \\\n\
+      --secret gemini_key,type=env,target=GEMINI_API_KEY \\\n\
+      <image-name> --model <model-name> \n\
+========================================================\n\n'
+
+# Runtime
+WORKDIR /home/agent/workspace
+ENTRYPOINT ["agy"]
+
+
+
