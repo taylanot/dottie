@@ -65,7 +65,7 @@ yesterdaily='zk edit --match "$(
   fi
 )"'
 
-update= "cd $ZK_NOTEBOOK_DIR; git add -A; git commit -am 'updating';git push origin main; cd -"
+update="cd \"$ZK_NOTEBOOK_DIR\"; git add -A; git commit -m \"updating $(date '+%Y-%m-%d')\"; git push origin main; cd -"
 
 [lsp]
 [lsp.diagnostics]
