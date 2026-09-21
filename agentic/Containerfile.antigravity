@@ -60,6 +60,9 @@ RUN printf '\n\
       <image-name> --model <model-name> \n\
 ========================================================\n\n'
 
+# Global skills
+COPY --chown=agent:agent skills/ /home/agent/.gemini/antigravity-cli/skills/
+
 # Runtime
 WORKDIR /home/agent/workspace
 ENTRYPOINT ["agy"]
