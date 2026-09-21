@@ -64,3 +64,5 @@ esac
 
 
 export PATH=$PATH:~/.cargo/bin
+
+alias agy='podman run --rm -it --secret gemini_key,type=env,target=GEMINI_API_KEY -v $(pwd):/home/agent/workspace agy'
