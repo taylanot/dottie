@@ -65,4 +65,84 @@ esac
 
 export PATH=$PATH:~/.cargo/bin
 
-alias agy='podman run --rm -it --secret gemini_key,type=env,target=GEMINI_API_KEY -v $(pwd):/home/agent/workspace agy'
+function agy() {
+  local model=""
+  local conv_volume=""
+  local effort=""
+  local args=()
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -m|--model)
+        model="$2"
+        shift 2
+        ;;
+      -v|--volume|-c|--conversation)
+        conv_volume="$2"
+        shift 2
+        ;;
+      -e|--effort)
+        effort="$2"
+        shift 2
+        ;;
+      *)
+        args+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  local podman_cmd=(podman run --rm -it)
+  podman_cmd+=(--secret gemini_key,type=env,target=GEMINI_API_KEY)
+  podman_cmd+=(-v "$(pwd):/home/agent/workspace")
+
+  if [[ -n "$conv_volume" ]]; then
+    podman_cmd+=(-v "$conv_volume:/home/agent/.gemini/antigravity-cli/brain")
+  fi
+
+  podman_cmd+=(agy)
+
+  if [[ -n "$model" ]]; then
+    podman_cmd+=(--model "$model")
+  fi
+
+  if [[ -n "$effort" ]]; then
+    podman_cmd+=(--effort "$effort")
+  fi
+
+  podman_cmd+=("${args[@]}")
+
+  "${podman_cmd[@]}"
+}
+
+function agy_spill() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: agy_spill <container_name_or_id> [destination_path]"
+    echo "Example: agy_spill my_agent_container ./saved_brains/"
+    return 1
+  fi
+
+  local container="$1"
+  local destination="${2:-.}" 
+  
+  local brain_path="/home/agent/.gemini/antigravity-cli/brain"
+
+  # Find the conversation ID folder inside the container
+  local conv_id=$(podman exec "$container" ls -1 "$brain_path" 2>/dev/null | head -n 1)
+
+  if [[ -n "$conv_id" ]]; then
+    echo "Found Conversation ID: $conv_id"
+    echo "Copying specific conversation brain to '${destination}/${conv_id}'..."
+    podman cp "${container}:${brain_path}/${conv_id}" "${destination}/"
+  else
+    echo "No Conversation ID found. Copying the entire brain folder..."
+    podman cp "${container}:${brain_path}" "${destination}"
+  fi
+
+  if [[ $? -eq 0 ]]; then
+    echo "Successfully copied brain!"
+  else
+    echo "Failed to copy brain. Is the container name correct?"
+    return 1
+  fi
+}
