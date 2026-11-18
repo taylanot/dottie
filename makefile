@@ -8,7 +8,7 @@ ifeq ($(OS),Darwin)
     BREW := /usr/local/bin/brew
   endif
 else
-  BREW := /home/linuxbrew/.linuxbrew/bin/brew
+  BREW := $(HOME)/.linuxbrew/bin/brew
 endif
 
 .PHONY: install minimal symlinks fonts plugins check help bootstrap brew packages minimal-packages shell
@@ -40,9 +40,14 @@ minimal: bootstrap brew minimal-packages symlinks plugins-minimal shell
 # ── Pre-brew: native deps (Linux only) ───────────────────
 bootstrap:
 ifeq ($(OS),Linux)
-	@echo "→ Installing curl and git via apt..."
-	@command -v sudo >/dev/null 2>&1 && SUDO=sudo || SUDO=""; \
-	$$SUDO apt-get install -y curl git build-essential
+	@echo "→ Checking dependencies..."
+	@if command -v sudo >/dev/null 2>&1 && sudo -n true 2>/dev/null; then \
+		echo "→ sudo available, installing curl and git via apt..."; \
+		sudo apt-get update && sudo apt-get install -y curl git build-essential; \
+	else \
+		echo "→ [Warning] No sudo access. Skipping apt-get."; \
+		echo "→ Ensure curl, git, and build-essential are installed!"; \
+	fi
 else
 	@xcode-select -p >/dev/null 2>&1 && echo "✓ Xcode CLI tools already installed" || \
 	  xcode-select --install
@@ -50,8 +55,12 @@ endif
 
 # ── Homebrew ──────────────────────────────────────────────
 brew:
-	@command -v brew >/dev/null 2>&1 || \
-	  /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	@command -v brew >/dev/null 2>&1 || ( \
+	  echo "→ Installing Homebrew locally without sudo..."; \
+	  git clone https://github.com/Homebrew/brew ~/.linuxbrew/Homebrew; \
+	  mkdir -p ~/.linuxbrew/bin; \
+	  ln -s ~/.linuxbrew/Homebrew/bin/brew ~/.linuxbrew/bin/brew \
+	)
 ifeq ($(OS),Linux)
 	@eval "$$($(BREW) shellenv)" && brew --version
 	@grep -qxF 'eval "$$($(BREW) shellenv)"' $(HOME)/.profile 2>/dev/null || \
@@ -115,9 +124,9 @@ check:
 shell:
 	@eval "$$($(BREW) shellenv 2>/dev/null)"; \
 	BREW_ZSH="$$(brew --prefix)/bin/zsh"; \
-	grep -qxF "$$BREW_ZSH" /etc/shells || echo "$$BREW_ZSH" | sudo tee -a /etc/shells; \
-	chsh -s "$$BREW_ZSH"
-	@echo "✓ Default shell changed to brew zsh. Re-login to take effect."
+	echo "→ Setting up ZSH to launch automatically from bash..."; \
+	grep -qxF "exec $$BREW_ZSH" $(HOME)/.bashrc 2>/dev/null || echo "exec $$BREW_ZSH" >> $(HOME)/.bashrc
+	@echo "✓ ZSH set as auto-launch shell in ~/.bashrc. Re-login to take effect."
 
 # ── Update Symlinks (force re-link) ──────────────────────
 update-symlinks:
